@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SportsSeatFinder — Live Sports Tickets, Guaranteed</title>
+  <meta name="description" content="Find NFL, NBA, MLB and NHL tickets through StubHub's verified marketplace. FanProtect Guarantee on every order. Last-minute seats available." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Design tokens ───────────────────────────────────────────── */
+    :root {
+      --bg:          #04060D;
+      --bg-card:     #0B1122;
+      --bg-card2:    #111C34;
+      --gold:        #F0A500;
+      --gold-lt:     #FFD060;
+      --red:         #E03020;
+      --white:       #FFFFFF;
+      --gray:        #8B9AB3;
+      --gray-dark:   #3A4560;
+      --border:      rgba(255,255,255,0.07);
+      --border-gold: rgba(240,165,0,0.25);
+      --radius:      14px;
+      --radius-sm:   8px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--white);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Noise texture overlay ──────────────────────────────────── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.5;
+    }
+
+    /* ── Utility ────────────────────────────────────────────────── */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+    .tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 5px 12px; border-radius: 100px;
+      border: 1px solid var(--border-gold);
+      color: var(--gold); background: rgba(240,165,0,0.08);
+    }
+    .tag-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); animation: pulse 2s infinite; }
+
+    @keyframes pulse {
+      0%,100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.8); }
+    }
+
+    /* ── Buttons ────────────────────────────────────────────────── */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 14px 28px; border-radius: var(--radius-sm);
+      text-decoration: none; border: none; cursor: pointer;
+      transition: all 0.2s ease; white-space: nowrap;
+    }
+    .btn-primary {
+      background: var(--gold);
+      color: #000;
+      box-shadow: 0 0 30px rgba(240,165,0,0.35), 0 4px 16px rgba(0,0,0,0.4);
+    }
+    .btn-primary:hover {
+      background: var(--gold-lt);
+      box-shadow: 0 0 50px rgba(240,165,0,0.55), 0 6px 24px rgba(0,0,0,0.5);
+      transform: translateY(-2px);
+    }
+    .btn-outline {
+      background: transparent;
+      color: var(--white);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover {
+      border-color: var(--gold);
+      color: var(--gold);
+      transform: translateY(-2px);
+    }
+    .btn-lg { padding: 18px 36px; font-size: 17px; }
+
+    /* Arrow icon */
+    .arrow { font-style: normal; transition: transform 0.2s; }
+    .btn:hover .arrow { transform: translateX(3px); }
+
+    /* ── Ticker ─────────────────────────────────────────────────── */
+    .ticker {
+      background: var(--gold);
+      color: #000;
+      padding: 10px 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 10;
+    }
+    .ticker-inner {
+      display: flex; gap: 0;
+      animation: ticker 30s linear infinite;
+      width: max-content;
+    }
+    .ticker-item {
+      font-family: 'Oswald', sans-serif;
+      font-size: 12px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 0 32px; white-space: nowrap;
+      border-right: 1px solid rgba(0,0,0,0.2);
+    }
+    @keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+    /* ── Nav ────────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      padding: 20px 0;
+      background: rgba(4,6,13,0.85);
+      backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+      transition: padding 0.3s;
+    }
+    nav .inner {
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px; letter-spacing: 0.05em;
+      color: var(--white); text-decoration: none;
+    }
+    .logo span { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 32px; }
+    .nav-links a {
+      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gray); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white); }
+    .nav-cta { display: flex; gap: 12px; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .nav-cta .btn-outline { display: none; }
+    }
+
+    /* ── Hero ───────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 92vh;
+      display: flex; align-items: center;
+      overflow: hidden;
+      padding: 80px 0 100px;
+    }
+
+    /* stadium ambient light */
+    .hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 60% 40%, rgba(240,165,0,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 80% at 10% 80%, rgba(240,165,0,0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 40% at 90% 10%, rgba(30,60,130,0.15) 0%, transparent 60%);
+    }
+
+    /* grid lines */
+    .hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px; align-items: center;
+    }
+    .hero-left { position: relative; z-index: 2; }
+
+    .hero-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.5rem, 10vw, 9rem);
+      line-height: 0.88;
+      letter-spacing: 0.02em;
+      margin: 20px 0 28px;
+    }
+    .hero-headline .line-gold { color: var(--gold); }
+    .hero-headline .line-outline {
+      -webkit-text-stroke: 2px rgba(255,255,255,0.25);
+      color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 17px; line-height: 1.7;
+      color: var(--gray); max-width: 460px;
+      margin-bottom: 40px;
+    }
+
+    .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; }
+
+    .hero-stats {
+      display: flex; gap: 40px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+    .hero-stat-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 2.4rem; color: var(--gold); letter-spacing: 0.03em;
+    }
+    .hero-stat-label {
+      font-size: 12px; color: var(--gray);
+      font-weight: 500; text-transform: uppercase;
+      letter-spacing: 0.08em; margin-top: 2px;
+    }
+
+    /* right side: floating card visual */
+    .hero-right { position: relative; z-index: 2; }
+    .hero-card-stack { position: relative; height: 480px; }
+    .hcard {
+      position: absolute;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+    }
+    .hcard:hover { transform: translateY(-4px) !important; }
+
+    .hcard-main {
+      width: 320px; left: 50%; transform: translateX(-50%);
+      top: 50%; transform: translate(-50%, -50%);
+      box-shadow: 0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(240,165,0,0.1);
+      border-color: rgba(240,165,0,0.15);
+      z-index: 3;
+    }
+    .hcard-back1 {
+      width: 290px; left: 50%; transform: translateX(calc(-50% - 30px)) rotate(-5deg);
+      top: 50%; transform: translate(calc(-50% - 30px), calc(-50% + 20px)) rotate(-6deg);
+      opacity: 0.6; z-index: 1;
+    }
+    .hcard-back2 {
+      width: 290px; left: 50%;
+      top: 50%; transform: translate(calc(-50% + 30px), calc(-50% + 20px)) rotate(6deg);
+      opacity: 0.6; z-index: 2;
+    }
+
+    .hcard-league {
+      font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 14px;
+    }
+    .hcard-event { font-family: 'Bebas Neue', sans-serif; font-size: 1.6rem; line-height: 1.1; }
+    .hcard-meta { display: flex; gap: 16px; margin: 12px 0; }
+    .hcard-meta span { font-size: 13px; color: var(--gray); }
+    .hcard-meta span strong { color: var(--white); font-weight: 500; }
+    .hcard-bar { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid var(--border); }
+    .hcard-price { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--gold); }
+    .hcard-price-label { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.08em; }
+    .hcard-badge {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.05em;
+      padding: 5px 10px; border-radius: 6px;
+      background: rgba(240,165,0,0.12); color: var(--gold);
+      border: 1px solid rgba(240,165,0,0.2);
+    }
+    .guarantee-strip {
+      display: flex; align-items: center; gap: 8px;
+      margin-top: 16px; padding: 10px 14px;
+      background: rgba(255,255,255,0.04); border-radius: var(--radius-sm);
+      font-size: 12px; color: var(--gray);
+    }
+    .guarantee-strip .shield { font-size: 16px; }
+
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .hero-right { display: none; }
+      .hero { min-height: auto; padding: 60px 0 80px; }
+    }
+
+    /* ── Leagues ────────────────────────────────────────────────── */
+    .leagues { padding: 80px 0; }
+    .section-label {
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 5vw, 4rem);
+      line-height: 1; margin-bottom: 16px;
+    }
+    .section-desc { font-size: 16px; color: var(--gray); max-width: 520px; line-height: 1.7; }
+
+    .section-header { margin-bottom: 48px; }
+    .section-header-row { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
+
+    .league-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    .league-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px 24px;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      position: relative; overflow: hidden;
+      display: block;
+    }
+    .league-card::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(240,165,0,0.06) 0%, transparent 60%);
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .league-card:hover::before { opacity: 1; }
+    .league-card:hover {
+      border-color: var(--border-gold);
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4), 0 0 0 1px rgba(240,165,0,0.1);
+    }
+    .league-icon {
+      font-size: 3rem; margin-bottom: 16px;
+      display: block; line-height: 1;
+    }
+    .league-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem;
+      letter-spacing: 0.05em; color: var(--white); margin-bottom: 6px;
+    }
+    .league-sub { font-size: 13px; color: var(--gray); }
+    .league-count {
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+      color: var(--gold); margin-top: 14px;
+      letter-spacing: 0.08em;
+    }
+
+    @media (max-width: 700px) {
+      .league-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ── Why StubHub ────────────────────────────────────────────── */
+    .why { padding: 80px 0; }
+    .why-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 48px;
+    }
+    .why-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 36px;
+      position: relative; overflow: hidden;
+    }
+    .why-card.featured {
+      grid-column: span 2;
+      background: var(--bg-card2);
+      border-color: var(--border-gold);
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center;
+    }
+    .why-card::after {
+      content: '';
+      position: absolute; top: 0; left: 0;
+      width: 3px; height: 0;
+      background: var(--gold);
+      border-radius: 0 0 4px 0;
+      transition: height 0.4s ease;
+    }
+    .why-card:hover::after { height: 100%; }
+    .why-icon {
+      font-size: 2rem; margin-bottom: 20px; display: block;
+    }
+    .why-title {
+      font-family: 'Oswald', sans-serif; font-size: 1.3rem; font-weight: 600;
+      margin-bottom: 12px; letter-spacing: 0.03em;
+    }
+    .why-desc { font-size: 15px; color: var(--gray); line-height: 1.7; }
+    .why-featured-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.05; margin-bottom: 16px;
+    }
+    .why-featured-headline span { color: var(--gold); }
+    .why-featured-desc { font-size: 16px; color: var(--gray); line-height: 1.7; }
+    .why-checkmarks { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+    .check-item { display: flex; align-items: center; gap: 10px; font-size: 14px; }
+    .check-item::before { content: '✓'; color: var(--gold); font-weight: 700; font-size: 13px; }
+    .why-featured-visual {
+      display: flex; flex-direction: column; gap: 12px;
+    }
+    .mini-ticket {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      display: flex; align-items: center; justify-content: space-between;
+      animation: floatIn 0.6s ease forwards;
+      opacity: 0;
+    }
+    .mini-ticket:nth-child(1) { animation-delay: 0.1s; }
+    .mini-ticket:nth-child(2) { animation-delay: 0.3s; }
+    .mini-ticket:nth-child(3) { animation-delay: 0.5s; }
+    @keyframes floatIn {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .mini-ticket-info { display: flex; flex-direction: column; gap: 3px; }
+    .mini-ticket-name { font-size: 14px; font-weight: 500; }
+    .mini-ticket-meta { font-size: 12px; color: var(--gray); }
+    .mini-ticket-price {
+      font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; color: var(--gold);
+    }
+
+    @media (max-width: 768px) {
+      .why-grid { grid-template-columns: 1fr; }
+      .why-card.featured { grid-column: span 1; grid-template-columns: 1fr; }
+    }
+
+    /* ── How it works ───────────────────────────────────────────── */
+    .how { padding: 80px 0; }
+    .steps {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 0; margin-top: 64px; position: relative;
+    }
+    .steps::before {
+      content: '';
+      position: absolute; top: 40px; left: 16.66%; right: 16.66%;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold) 0%, rgba(240,165,0,0.2) 100%);
+    }
+    .step { text-align: center; padding: 0 24px; position: relative; }
+    .step-num {
+      width: 80px; height: 80px;
+      border-radius: 50%;
+      background: var(--bg-card);
+      border: 2px solid var(--border-gold);
+      font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--gold);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 28px;
+      position: relative; z-index: 1;
+      box-shadow: 0 0 30px rgba(240,165,0,0.15);
+    }
+    .step-title {
+      font-family: 'Oswald', sans-serif; font-size: 1.2rem; font-weight: 600;
+      margin-bottom: 12px; letter-spacing: 0.03em;
+    }
+    .step-desc { font-size: 14px; color: var(--gray); line-height: 1.7; }
+
+    @media (max-width: 700px) {
+      .steps { grid-template-columns: 1fr; }
+      .steps::before { display: none; }
+      .step { padding: 0 0 32px; text-align: left; display: flex; gap: 20px; align-items: flex-start; }
+      .step-num { width: 52px; height: 52px; font-size: 1.5rem; flex-shrink: 0; margin: 0; }
+    }
+
+    /* ── FAQ ────────────────────────────────────────────────────── */
+    .faq { padding: 80px 0; }
+    .faq-grid {
+      display: grid; grid-template-columns: 1fr 1.6fr;
+      gap: 80px; margin-top: 48px;
+    }
+    .faq-intro .section-desc { margin-top: 16px; }
+    .faq-cta { margin-top: 32px; }
+    .faq-list { display: flex; flex-direction: column; gap: 2px; }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .faq-question {
+      width: 100%; background: none; border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+      padding: 22px 0; text-align: left;
+      font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500;
+      color: var(--white); transition: color 0.2s;
+    }
+    .faq-question:hover { color: var(--gold); }
+    .faq-chevron {
+      width: 28px; height: 28px; border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: all 0.3s;
+      font-size: 14px;
+    }
+    .faq-item.open .faq-chevron {
+      background: var(--gold); border-color: var(--gold);
+      color: #000; transform: rotate(45deg);
+    }
+    .faq-answer {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s;
+      font-size: 15px; color: var(--gray); line-height: 1.75;
+    }
+    .faq-item.open .faq-answer { max-height: 300px; padding-bottom: 22px; }
+
+    @media (max-width: 768px) {
+      .faq-grid { grid-template-columns: 1fr; gap: 40px; }
+    }
+
+    /* ── Bottom CTA ─────────────────────────────────────────────── */
+    .cta-section {
+      padding: 100px 0;
+      position: relative; overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 80% at 50% 50%, rgba(240,165,0,0.07) 0%, transparent 70%);
+    }
+    .cta-inner {
+      text-align: center; position: relative; z-index: 1;
+      max-width: 700px; margin: 0 auto;
+    }
+    .cta-headline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem);
+      line-height: 1; margin: 16px 0 24px;
+    }
+    .cta-headline span { color: var(--gold); }
+    .cta-desc { font-size: 17px; color: var(--gray); margin-bottom: 40px; line-height: 1.7; }
+    .cta-buttons { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+    .cta-trust {
+      display: flex; justify-content: center; align-items: center; gap: 24px;
+      margin-top: 40px; flex-wrap: wrap;
+    }
+    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--gray); }
+    .trust-item::before { content: '✓'; color: var(--gold); font-weight: 700; }
+
+    /* ── Footer ─────────────────────────────────────────────────── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 48px 0 32px;
+    }
+    .footer-grid {
+      display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr;
+      gap: 40px; margin-bottom: 48px;
+    }
+    .footer-brand .logo { font-size: 22px; display: block; margin-bottom: 12px; }
+    .footer-desc { font-size: 13px; color: var(--gray); line-height: 1.7; max-width: 260px; }
+    .footer-heading {
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--white); margin-bottom: 16px;
+    }
+    .footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .footer-links a { font-size: 13px; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-bottom {
+      border-top: 1px solid var(--border);
+      padding-top: 28px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 24px; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 12px; color: var(--gray-dark); }
+    .disclosure {
+      font-size: 11px; color: var(--gray-dark); line-height: 1.6;
+      max-width: 680px; text-align: right;
+    }
+    .disclosure a { color: var(--gray); text-decoration: underline; }
+    .disclosure strong { color: var(--gray); }
+
+    @media (max-width: 768px) {
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+      .footer-bottom { flex-direction: column; }
+      .disclosure { text-align: left; }
+    }
+    @media (max-width: 500px) {
+      .footer-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ── Scroll animations ──────────────────────────────────────── */
+    .reveal {
+      opacity: 0; transform: translateY(24px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-d1 { transition-delay: 0.1s; }
+    .reveal-d2 { transition-delay: 0.2s; }
+    .reveal-d3 { transition-delay: 0.3s; }
+    .reveal-d4 { transition-delay: 0.4s; }
+  </style>
+</head>
+<body>
+
+<!-- ── Ticker ──────────────────────────────────────────────────── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-inner" id="ticker">
+    <span class="ticker-item">🏈 NFL Tickets Available</span>
+    <span class="ticker-item">🏀 NBA Playoffs — Limited Seats</span>
+    <span class="ticker-item">⚾ MLB Opening Day</span>
+    <span class="ticker-item">🏒 NHL Finals — Hot Deals</span>
+    <span class="ticker-item">🎟 FanProtect Guarantee on Every Order</span>
+    <span class="ticker-item">🏈 NFL Tickets Available</span>
+    <span class="ticker-item">🏀 NBA Playoffs — Limited Seats</span>
+    <span class="ticker-item">⚾ MLB Opening Day</span>
+    <span class="ticker-item">🏒 NHL Finals — Hot Deals</span>
+    <span class="ticker-item">🎟 FanProtect Guarantee on Every Order</span>
+  </div>
+</div>
+
+<!-- ── Navigation ───────────────────────────────────────────────── -->
+<nav>
+  <div class="container">
+    <div class="inner">
+      <a href="/" class="logo">Sports<span>Seat</span>Finder</a>
+      <div class="nav-links">
+        <a href="#leagues">By League</a>
+        <a href="#why">Why StubHub</a>
+        <a href="#how">How It Works</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-cta">
+        <a href="YOUR-MAXBOUNTY-LINK-HERE" class="btn btn-outline" target="_blank" rel="noopener nofollow sponsored">Browse Events</a>
+        <a href="YOUR-MAXBOUNTY-LINK-HERE" class="btn btn-primary" target="_blank" rel="noopener nofollow sponsored">Find Tickets</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Hero ─────────────────────────────────────────────────────── -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-left">
+        <div class="tag reveal">
+          <span class="tag-dot"></span>
+          Trusted by millions of fans
+        </div>
+        <h1 class="hero-headline reveal reveal-d1">
+          <span class="line-gold">Get In</span><br/>
+          <span>The Game.</span><br/>
+          <span class="line-outline">Your Seat</span><br/>
+          <span>Awaits.</span>
+        </h1>
+        <p class="hero-desc reveal reveal-d2">
+          Access NFL, NBA, MLB and NHL tickets through StubHub — the world's largest sports ticket marketplace. Every ticket backed by the FanProtect Guarantee.
+        </p>
+        <div class="hero-ctas reveal reveal-d3">
+          <a href="YOUR-MAXBOUNTY-LINK-HERE" class="btn btn-primary btn-lg" target="_blank" rel="noopener nofollow sponsored">
+            Find My Seats <span class="arrow">→</span>
+          </a>
+          <a href="#how" class="btn btn-outline btn-lg">How It Works</a>
+        </div>
+        <div class="hero-stats reveal reveal-d4">
+          <div>
+            <div class="hero-stat-num">100M+</div>
+            <div class="hero-stat-label">Tickets Sold</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">50K+</div>
+            <div class="hero-stat-label">Events Live Now</div>
+          </div>
+          <div>
+            <div class="hero-stat-num">100%</div>
+            <div class="hero-stat-label">FanProtect Guarantee</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right" aria-hidden="true">
+        <div class="hero-card-stack">
+          <div class="hcard hcard-back1">
+            <div class="hcard-league">🏒 NHL · Stanley Cup Finals</div>
+            <div class="hcard-event">Rangers vs Panthers<br/>Game 6</div>
+          </div>
+          <div class="hcard hcard-back2">
+            <div class="hcard-league">⚾ MLB · Regular Season</div>
+            <div class="hcard-event">Yankees vs Dodgers<br/>Yankee Stadium</div>
+          </div>
+          <div class="hcard hcard-main">
+            <div class="hcard-league">🏈 NFL · Divisional Round</div>
+            <div class="hcard-event">Chiefs vs Bills<br/>Arrowhead Stadium</div>
+            <div class="hcard-meta">
+              <span><strong>Jan 19</strong> · 4:30 PM</span>
+              <span><strong>Kansas City, MO</strong></span>
+            </div>
+            <div class="hcard-bar">
+              <div>
+                <div class="hcard-price-label">From</div>
+                <div class="hcard-price">$189</div>
+              </div>
+              <div class="hcard-badge">Available Now</div>
+            </div>
+            <div class="guarantee-strip">
+              <span class="shield">🛡</span>
+              FanProtect Guarantee — verified ticket delivery
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Leagues ───────────────────────────────────────────────────── -->
+<section class="leagues" id="leagues">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Browse by league</div>
+      <div class="section-header-row">
+        <h2 class="section-title">Your Sport.<br/>Your Team.</h2>
+        <a href="YOUR-MAXBOUNTY-LINK-HERE" class="btn btn-outline" target="_blank" rel="noopener nofollow sponsored">View All Events <span class="arrow">→</span></a>
+      </div>
+    </div>
+    <div class="league-grid">
+      <a href="YOUR-MAXBOUNTY-LINK-HERE" class="league-card reveal" target="_blank" rel="noopener nofollow sponsored">
+        <span class="league-icon">🏈</span>
+        <div class="league-name">NFL</div>
+        <div class="league-sub">National Football League</div>
+        <div class="league-count">Thousands of seats available</div>
+      </a>
+      <a href="YOUR-MAXBOUNTY-LINK-HERE" class="league-card reveal reveal-d1" target="_blank" rel="noopener nofollow sponsored">
+        <span class="league-icon">🏀</span>
+        <div class="league-name">NBA</div>
+        <div class="league-sub">National Basketball Association</div>
+        <div class="league-count">Courtside to nosebleeds</div>
+      </a>
+      <a href="YOUR-MAXBOUNTY-LINK-HERE" class="league-card reveal reveal-d2" target="_blank" rel="noopener nofollow sponsored">
+        <span class="league-icon">⚾</span>
+        <div class="league-name">MLB</div>
+        <div class="league-sub">Major League Baseball</div>
+        <div class="league-count">All 30 stadiums covered</div>
+      </a>
+      <a href="YOUR-MAXBOUNTY-LINK-HERE" class="league-card reveal reveal-d3" target="_blank" rel="noopener nofollow sponsored">
+        <span class="league-icon">🏒</span>
+        <div class="league-name">NHL</div>
+        <div class="league-sub">National Hockey League</div>
+        <div class="league-count">Ice-level to upper deck</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── Why StubHub ───────────────────────────────────────────────── -->
+<section class="why" id="why">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="section-label">Why we recommend StubHub</div>
+      <h2 class="section-title">The Safest Way<br/>to Buy Tickets</h2>
+    </div>
+    <div class="why-grid">
+      <div class="why-card featured reveal">
+        <div>
+          <h3 class="why-featured-headline">The <span>FanProtect</span><br/>Guarantee</h3>
+          <p class="why-featured-desc">StubHub stands behind every ticket sold on its platform. If something goes wrong — invalid tickets, event cancellations, or delivery issues — you're fully protected.</p>
+          <ul class="why-checkmarks">
+            <li class="check-item">Your tickets are valid or you get a full refund</li>
+            <li class="check-item">Event cancellation protection on every order</li>
+            <li class="check-item">24/7 customer support for all purchases</li>
+            <li class="check-item">Secure, encrypted payment processing</li>
+          </ul>
+        </div>
+        <div class="why-featured-visual">
+          <div class="mini-ticket">
+            <div class="mini-ticket-info">
+              <span class="mini-ticket-name">Chiefs vs Bills · Section 134</span>
+              <span class="mini-ticket-meta">Row 12 · Seat 8 · Mobile Delivery</span>
+            </div>
+            <span class="mini-ticket-price">$189</span>
+          </div>
+          <div class="mini-ticket">
+            <div class="mini-ticket-info">
+              <span class="mini-ticket-name">Lakers vs Celtics · Lower Level</span>
+              <span class="mini-ticket-meta">Row G · Seat 21 · Mobile Delivery</span>
+            </div>
+            <span class="mini-ticket-price">$245</span>
+          </div>
+          <div class="mini-ticket">
+            <div class="mini-ticket-info">
+              <span class="mini-ticket-name">Yankees vs Dodgers · Field Box</span>
+              <span class="mini-ticket-meta">Row 3 · Seat 14 · Mobile Delivery</span>
+            </div>
+            <span class="mini-ticket-price">$312</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="why-card reveal">
+        <span class="why-icon">🌎</span>
+        <h3 class="why-title">World's Largest Marketplace</h3>
+        <p class="why-desc">Millions of tickets to thousands of events. No matter your team, your city, or your budget — you'll find your seat on StubHub.</p>
+      </div>
+      <div class="why-card reveal reveal-d1">
+        <span class="why-icon">⚡</span>
+        <h3 class="why-title">Last-Minute Availability</h3>
+        <p class="why-desc">Decided to go at the last minute? StubHub has tickets available right up to game time, delivered digitally to your phone in seconds.</p>
+      </div>
+      <div class="why-card reveal reveal-d2">
+        <span class="why-icon">💸</span>
+        <h3 class="why-title">Transparent Pricing</h3>
+        <p class="why-desc">See all fees upfront before you check out. No surprise charges. What you see is what you pay — simple and honest pricing.</p>
+      </div>
+      <div class="why-card reveal reveal-d3">
+        <span class="why-icon">📱</span>
+        <h3 class="why-title">Instant Mobile Delivery</h3>
+        <p class="why-desc">Most tickets are delivered as mobile barcodes directly to your phone. Walk straight into the stadium — no printing required.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── How It Works ──────────────────────────────────────────────── -->
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-header reveal" style="text-align:center; max-width: 600px; margin: 0 auto 0;">
+      <div class="section-label">Simple process</div>
+      <h2 class="section-title">Get to the Game<br/>in 3 Easy Steps</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <h3 class="step-title">Search Your Event</h3>
+        <p class="step-desc">Browse by team, league, city, or venue. Filter by date, price range, and seat section to find exactly what you need.</p>
+      </div>
+      <div class="step reveal reveal-d1">
+        <div class="step-num">2</div>
+        <h3 class="step-title">Choose Your Seats</h3>
+        <p class="step-desc">View the interactive seat map, see photos of the view from your section, and compare prices across the entire stadium.</p>
+      </div>
+      <div class="step reveal reveal-d2">
+        <div class="step-num">3</div>
+        <h3 class="step-title">Receive Your Tickets</h3>
+        <p class="step-desc">Pay securely and get your tickets delivered digitally — straight to your phone. You're in. Enjoy the game.</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top: 56px;" class="reveal">
+      <a href="YOUR-MAXBOUNTY-LINK-HERE" class="btn btn-primary btn-lg" target="_blank" rel="noopener nofollow sponsored">
+        Start Searching Now <span class="arrow">→</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ──────────────────────────────────────────────────────── -->
+<section class="faq" id="faq">
+  <div class="container">
+    <div class="faq-grid">
+      <div class="faq-intro reveal">
+        <div class="section-label">Common questions</div>
+        <h2 class="section-title">Everything You<br/>Need to Know</h2>
+        <p class="section-desc">Have more questions? StubHub's support team is available 24/7 to help with any purchase.</p>
+        <div class="faq-cta">
+          <a href="YOUR-MAXBOUNTY-LINK-HERE" class="btn btn-primary" target="_blank" rel="noopener nofollow sponsored">
+            Browse Tickets <span class="arrow">→</span>
+          </a>
+        </div>
+      </div>
+      <div class="faq-list reveal reveal-d1">
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Are tickets on StubHub legitimate?
+            <span class="faq-chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes. StubHub is the world's largest and most trusted ticket marketplace. Every ticket sold is backed by the FanProtect Guarantee — if your ticket is invalid at the gate, StubHub will replace it with a comparable or better ticket, or give you a full refund.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Can I get tickets at the last minute?
+            <span class="faq-chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            Absolutely. StubHub sells tickets right up until game time, and most are delivered instantly as mobile barcodes. You can buy a ticket an hour before kickoff and walk straight in with your phone.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            What happens if the event is canceled?
+            <span class="faq-chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            If an event is officially canceled and not rescheduled, you'll receive a full refund to your original payment method. The FanProtect Guarantee covers you for cancellations, postponements, and venue changes.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            How are tickets delivered?
+            <span class="faq-chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            Most tickets are delivered as mobile barcodes via the StubHub app or email — no printing needed. Some older events may still use FedEx delivery for hard-copy tickets, but mobile delivery is now standard for all major sports leagues.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Are there fees on top of the listed price?
+            <span class="faq-chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            StubHub shows a full price breakdown at checkout, including service fees, before you complete your purchase. There are no hidden charges — you see the total cost before you pay.
+          </div>
+        </div>
+        <div class="faq-item">
+          <button class="faq-question" aria-expanded="false">
+            Is my payment information secure?
+            <span class="faq-chevron">+</span>
+          </button>
+          <div class="faq-answer">
+            Yes. StubHub uses industry-standard SSL encryption to protect all payment data. Your financial information is never shared with ticket sellers and is processed through a secure, PCI-compliant payment system.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Bottom CTA ────────────────────────────────────────────────── -->
+<section class="cta-section">
+  <div class="container">
+    <div class="cta-inner reveal">
+      <div class="tag" style="margin: 0 auto 20px; display: inline-flex;">
+        <span class="tag-dot"></span>
+        Tickets available now
+      </div>
+      <h2 class="cta-headline">Ready to Be<br/><span>In the Arena?</span></h2>
+      <p class="cta-desc">Don't watch from home when you could be there. Find your seats for the next big game — NFL, NBA, MLB, NHL and more, all with FanProtect Guarantee.</p>
+      <div class="cta-buttons">
+        <a href="YOUR-MAXBOUNTY-LINK-HERE" class="btn btn-primary btn-lg" target="_blank" rel="noopener nofollow sponsored">
+          Find My Tickets <span class="arrow">→</span>
+        </a>
+        <a href="YOUR-MAXBOUNTY-LINK-HERE" class="btn btn-outline btn-lg" target="_blank" rel="noopener nofollow sponsored">
+          Browse All Sports
+        </a>
+      </div>
+      <div class="cta-trust">
+        <div class="trust-item">FanProtect Guarantee</div>
+        <div class="trust-item">Secure Checkout</div>
+        <div class="trust-item">Mobile Delivery</div>
+        <div class="trust-item">24/7 Support</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────────────── -->
+<footer>
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="/" class="logo">Sports<span>Seat</span>Finder</a>
+        <p class="footer-desc">Your guide to finding live sports tickets. We help fans discover seats at NFL, NBA, MLB, and NHL events through trusted marketplaces.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Sports</div>
+        <ul class="footer-links">
+          <li><a href="YOUR-MAXBOUNTY-LINK-HERE" rel="nofollow sponsored">NFL Tickets</a></li>
+          <li><a href="YOUR-MAXBOUNTY-LINK-HERE" rel="nofollow sponsored">NBA Tickets</a></li>
+          <li><a href="YOUR-MAXBOUNTY-LINK-HERE" rel="nofollow sponsored">MLB Tickets</a></li>
+          <li><a href="YOUR-MAXBOUNTY-LINK-HERE" rel="nofollow sponsored">NHL Tickets</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Information</div>
+        <ul class="footer-links">
+          <li><a href="#how">How It Works</a></li>
+          <li><a href="#why">Why StubHub</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links">
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="#disclosure">Affiliate Disclosure</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom" id="disclosure">
+      <div class="footer-copy">© 2026 SportsSeatFinder. All rights reserved.</div>
+      <div class="disclosure">
+        <strong>Affiliate Disclosure:</strong> SportsSeatFinder participates in affiliate marketing programs. When you click links on this site and make a purchase, we may earn a commission at no additional cost to you. We only recommend services we believe provide genuine value. Ticket availability and pricing are controlled by StubHub and may vary. This site is not affiliated with or endorsed by any sports league, team, or venue.
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ── Scroll reveal ──────────────────────────────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── FAQ accordion ──────────────────────────────────────────────
+  document.querySelectorAll('.faq-question').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item.open').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+      btn.setAttribute('aria-expanded', !isOpen);
+    });
+  });
+
+  // ── Sticky nav shadow ──────────────────────────────────────────
+  const nav = document.querySelector('nav');
+  window.addEventListener('scroll', () => {
+    nav.style.boxShadow = window.scrollY > 10
+      ? '0 4px 30px rgba(0,0,0,0.4)'
+      : 'none';
+  });
+</script>
+</body>
+</html>
