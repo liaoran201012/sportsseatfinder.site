@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog — Sports Ticket Tips & Guides | SportsSeatFinder</title>
+  <meta name="description" content="Expert guides on buying sports tickets. Compare StubHub and Ticketmaster, find the best deals on NFL, NBA, MLB, and NHL tickets, and learn insider strategies to save money." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --bg: #04060D; --bg-card: #0B1122; --bg-card2: #111C34;
+      --gold: #F0A500; --gold-lt: #FFD060;
+      --tm-blue: #026CDF; --tm-blue-lt: #4AABFF;
+      --white: #FFFFFF; --gray: #8B9AB3; --gray-dark: #3A4560;
+      --border: rgba(255,255,255,0.07); --border-gold: rgba(240,165,0,0.25);
+      --radius: 14px; --radius-sm: 8px;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'DM Sans', sans-serif; background: var(--bg);
+      color: var(--white); overflow-x: hidden; -webkit-font-smoothing: antialiased;
+    }
+    body::before {
+      content: ''; position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 200px; pointer-events: none; z-index: 0; opacity: 0.5;
+    }
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 100; padding: 20px 0;
+      background: rgba(4,6,13,0.85); backdrop-filter: blur(20px) saturate(1.4);
+      border-bottom: 1px solid var(--border);
+    }
+    nav .inner { display: flex; align-items: center; justify-content: space-between; }
+    .logo { font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 0.05em; color: var(--white); text-decoration: none; }
+    .logo span { color: var(--gold); }
+    .nav-links { display: flex; align-items: center; gap: 28px; }
+    .nav-links a {
+      font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--gray);
+      text-decoration: none; transition: color 0.2s;
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-cta { display: flex; gap: 10px; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 12px 24px; border-radius: var(--radius-sm);
+      text-decoration: none; border: none; cursor: pointer; transition: all 0.2s ease;
+    }
+    .btn-primary { background: var(--gold); color: #000; box-shadow: 0 0 30px rgba(240,165,0,0.3); }
+    .btn-primary:hover { background: var(--gold-lt); transform: translateY(-2px); }
+    .btn-outline { background: transparent; color: var(--white); border: 1px solid var(--border); }
+    .btn-outline:hover { border-color: var(--gold); color: var(--gold); transform: translateY(-2px); }
+    .btn-tm { background: var(--tm-blue); color: #fff; }
+    .btn-tm:hover { background: var(--tm-blue-lt); transform: translateY(-2px); }
+    .arrow { font-style: normal; transition: transform 0.2s; }
+    .btn:hover .arrow { transform: translateX(3px); }
+    @media (max-width: 900px) { .nav-links { display: none; } .nav-cta .btn-outline { display: none; } }
+
+    /* Page header */
+    .page-header {
+      padding: 80px 0 60px; position: relative; overflow: hidden;
+    }
+    .page-header::before {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 80% at 20% 50%, rgba(240,165,0,0.05) 0%, transparent 70%);
+    }
+    .breadcrumb {
+      display: flex; align-items: center; gap: 8px;
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--gray); margin-bottom: 20px;
+    }
+    .breadcrumb a { color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .breadcrumb a:hover { color: var(--gold); }
+    .breadcrumb span { color: var(--gray-dark); }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(3rem, 7vw, 6rem); line-height: 1; margin-bottom: 16px;
+    }
+    .page-title span { color: var(--gold); }
+    .page-desc { font-size: 17px; color: var(--gray); max-width: 560px; line-height: 1.7; }
+
+    /* Category filter */
+    .category-bar {
+      padding: 0 0 48px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+    }
+    .cat-btn {
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 8px 18px; border-radius: 100px; border: 1px solid var(--border);
+      color: var(--gray); background: transparent; cursor: pointer; transition: all 0.2s;
+      text-decoration: none; display: inline-block;
+    }
+    .cat-btn:hover, .cat-btn.active {
+      border-color: var(--gold); color: var(--gold);
+      background: rgba(240,165,0,0.08);
+    }
+
+    /* Featured post */
+    .featured-post {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0; background: var(--bg-card); border: 1px solid var(--border-gold);
+      border-radius: var(--radius); overflow: hidden; margin-bottom: 48px;
+      text-decoration: none; transition: all 0.25s ease;
+    }
+    .featured-post:hover {
+      box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+      transform: translateY(-4px);
+    }
+    .featured-img {
+      background: var(--bg-card2); min-height: 320px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 5rem; position: relative; overflow: hidden;
+    }
+    .featured-img-bg { position: absolute; inset: 0; }
+    .featured-img-emoji { position: relative; z-index: 1; }
+    .featured-body { padding: 48px; display: flex; flex-direction: column; justify-content: center; }
+    .featured-tag {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      padding: 4px 12px; border-radius: 100px;
+      border: 1px solid var(--border-gold);
+      color: var(--gold); background: rgba(240,165,0,0.08);
+      margin-bottom: 20px; width: fit-content;
+    }
+    .featured-title {
+      font-family: 'Bebas Neue', sans-serif; font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1.05; color: var(--white); margin-bottom: 16px;
+    }
+    .featured-excerpt { font-size: 15px; color: var(--gray); line-height: 1.7; margin-bottom: 24px; }
+    .featured-meta { font-size: 13px; color: var(--gray-dark); display: flex; align-items: center; gap: 16px; }
+    .featured-read { color: var(--gold); font-weight: 600; font-family: 'Oswald', sans-serif; letter-spacing: 0.05em; text-transform: uppercase; font-size: 13px; }
+
+    @media (max-width: 768px) { .featured-post { grid-template-columns: 1fr; } .featured-img { min-height: 200px; } .featured-body { padding: 28px; } }
+
+    /* Article grid */
+    .articles-section { padding-bottom: 100px; }
+    .articles-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+    }
+    .article-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden;
+      text-decoration: none; transition: all 0.25s ease;
+      display: flex; flex-direction: column;
+    }
+    .article-card:hover {
+      border-color: var(--border-gold); transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+    }
+    .article-img {
+      height: 140px; position: relative; overflow: hidden;
+      display: flex; align-items: center; justify-content: center; font-size: 2.8rem;
+    }
+    .article-img-bg { position: absolute; inset: 0; }
+    .article-img-emoji { position: relative; z-index: 1; }
+    .article-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
+    .article-cat {
+      font-family: 'Oswald', sans-serif; font-size: 10px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 10px;
+    }
+    .article-title {
+      font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 600;
+      color: var(--white); line-height: 1.35; margin-bottom: 10px;
+    }
+    .article-excerpt { font-size: 13px; color: var(--gray); line-height: 1.7; flex: 1; }
+    .article-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border);
+      font-size: 12px; color: var(--gray-dark);
+    }
+    .article-read {
+      color: var(--gold); font-weight: 600; font-size: 12px;
+      font-family: 'Oswald', sans-serif; letter-spacing: 0.05em;
+    }
+
+    @media (max-width: 900px) { .articles-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 600px) { .articles-grid { grid-template-columns: 1fr; } }
+
+    /* Section label */
+    .section-label-row {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+    }
+    .section-label {
+      font-family: 'Oswald', sans-serif; font-size: 12px; font-weight: 600;
+      letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold);
+    }
+    .section-label-line { flex: 1; height: 1px; background: var(--border); }
+
+    /* Newsletter strip */
+    .newsletter-strip {
+      background: var(--bg-card2); border: 1px solid var(--border-gold);
+      border-radius: var(--radius); padding: 40px 48px;
+      display: flex; align-items: center; justify-content: space-between; gap: 32px;
+      margin: 48px 0;
+      flex-wrap: wrap;
+    }
+    .newsletter-text h3 {
+      font-family: 'Bebas Neue', sans-serif; font-size: 2rem; margin-bottom: 6px;
+    }
+    .newsletter-text p { font-size: 14px; color: var(--gray); max-width: 420px; }
+    .newsletter-cta { display: flex; gap: 12px; flex-wrap: wrap; }
+
+    /* Footer */
+    footer { border-top: 1px solid var(--border); padding: 40px 0 28px; }
+    .footer-bottom {
+      display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap;
+    }
+    .footer-copy { font-size: 12px; color: var(--gray-dark); }
+    .footer-nav { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-nav a { font-size: 13px; color: var(--gray); text-decoration: none; transition: color 0.2s; }
+    .footer-nav a:hover { color: var(--gold); }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="container">
+    <div class="inner">
+      <a href="/" class="logo">Sports<span>Seat</span>Finder</a>
+      <div class="nav-links">
+        <a href="/#leagues">By League</a>
+        <a href="/#compare">Compare</a>
+        <a href="/#how">How It Works</a>
+        <a href="blog.html" class="active">Blog</a>
+        <a href="/#faq">FAQ</a>
+      </div>
+      <div class="nav-cta">
+        <a href="https://afflat3d2.com/trk/lnk/EEEF4C3E-BAEE-4071-A07E-A006C5AB6168/?o=31434&c=918273&a=638483&k=10629C4BFFA142D355F3D9537C689534&l=36906" class="btn btn-outline" target="_blank" rel="noopener nofollow sponsored">StubHub</a>
+        <a href="https://www.ticketmaster.com" class="btn btn-primary" target="_blank" rel="noopener nofollow sponsored">Find Tickets</a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<section class="page-header">
+  <div class="container">
+    <div class="breadcrumb">
+      <a href="/">Home</a>
+      <span>›</span>
+      <span>Blog</span>
+    </div>
+    <h1 class="page-title">Ticket Tips &<br/><span>Insider Guides</span></h1>
+    <p class="page-desc">Everything you need to buy smarter — platform comparisons, money-saving strategies, and sport-by-sport timing guides from our ticket experts.</p>
+  </div>
+</section>
+
+<section class="articles-section">
+  <div class="container">
+
+    <div class="category-bar">
+      <span class="cat-btn active">All Posts</span>
+      <span class="cat-btn">Platform Comparison</span>
+      <span class="cat-btn">Money-Saving Tips</span>
+      <span class="cat-btn">Buying Guides</span>
+      <span class="cat-btn">By Sport</span>
+    </div>
+
+    <!-- Featured post -->
+    <a href="blog/stubhub-vs-ticketmaster.html" class="featured-post">
+      <div class="featured-img">
+        <div class="featured-img-bg" style="background: linear-gradient(135deg, rgba(240,165,0,0.12) 0%, rgba(2,108,223,0.12) 100%);"></div>
+        <span class="featured-img-emoji">⚖️</span>
+      </div>
+      <div class="featured-body">
+        <div class="featured-tag">✦ Featured Guide</div>
+        <h2 class="featured-title">StubHub vs Ticketmaster: Which Is Right for You?</h2>
+        <p class="featured-excerpt">Both platforms are trusted and widely used, but they work very differently. StubHub is a resale marketplace; Ticketmaster sells official primary tickets. One is often cheaper. The other is often safer. Here's the complete breakdown.</p>
+        <div class="featured-meta">
+          <span>8 min read &nbsp;·&nbsp; June 2026</span>
+          <span class="featured-read">Read Full Guide →</span>
+        </div>
+      </div>
+    </a>
+
+    <!-- Article grid -->
+    <div class="section-label-row">
+      <span class="section-label">All Articles</span>
+      <div class="section-label-line"></div>
+    </div>
+
+    <div class="articles-grid">
+      <a href="blog/stubhub-vs-ticketmaster.html" class="article-card">
+        <div class="article-img">
+          <div class="article-img-bg" style="background: linear-gradient(135deg, rgba(240,165,0,0.12) 0%, rgba(2,108,223,0.12) 100%);"></div>
+          <span class="article-img-emoji">⚖️</span>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Platform Comparison</div>
+          <div class="article-title">StubHub vs Ticketmaster: Which Is Right for You?</div>
+          <div class="article-excerpt">A complete side-by-side breakdown of fees, guarantees, inventory, and when to use each platform.</div>
+          <div class="article-meta">
+            <span>8 min read</span>
+            <span class="article-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog/cheap-sports-tickets.html" class="article-card">
+        <div class="article-img">
+          <div class="article-img-bg" style="background: linear-gradient(135deg, rgba(0,200,100,0.12) 0%, rgba(240,165,0,0.12) 100%);"></div>
+          <span class="article-img-emoji">💰</span>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Money-Saving Tips</div>
+          <div class="article-title">How to Score Cheap NFL, NBA &amp; MLB Tickets in 2026</div>
+          <div class="article-excerpt">Timing, flexibility, and platform strategy can cut your ticket cost in half. Here's what actually works.</div>
+          <div class="article-meta">
+            <span>6 min read</span>
+            <span class="article-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog/best-time-to-buy.html" class="article-card">
+        <div class="article-img">
+          <div class="article-img-bg" style="background: linear-gradient(135deg, rgba(130,30,200,0.12) 0%, rgba(240,165,0,0.12) 100%);"></div>
+          <span class="article-img-emoji">⏰</span>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Buying Guide</div>
+          <div class="article-title">The Best Time to Buy Sports Tickets (by Sport)</div>
+          <div class="article-excerpt">NFL, NBA, MLB, and NHL each have their own pricing patterns. Know when to buy and when to wait.</div>
+          <div class="article-meta">
+            <span>5 min read</span>
+            <span class="article-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog/stubhub-vs-ticketmaster.html" class="article-card">
+        <div class="article-img">
+          <div class="article-img-bg" style="background: linear-gradient(135deg, rgba(240,165,0,0.08) 0%, rgba(200,50,20,0.12) 100%);"></div>
+          <span class="article-img-emoji">🏈</span>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">By Sport — NFL</div>
+          <div class="article-title">How to Find the Best NFL Playoff Tickets</div>
+          <div class="article-excerpt">Playoff tickets sell fast and prices fluctuate wildly. Learn the strategies that get you in the stadium without overpaying.</div>
+          <div class="article-meta">
+            <span>7 min read</span>
+            <span class="article-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog/cheap-sports-tickets.html" class="article-card">
+        <div class="article-img">
+          <div class="article-img-bg" style="background: linear-gradient(135deg, rgba(240,165,0,0.08) 0%, rgba(50,150,255,0.12) 100%);"></div>
+          <span class="article-img-emoji">🏀</span>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">By Sport — NBA</div>
+          <div class="article-title">NBA Tickets on a Budget: Courtside Dreams, Real Prices</div>
+          <div class="article-excerpt">The NBA regular season is one of the best sports values in live entertainment — if you know which games to target.</div>
+          <div class="article-meta">
+            <span>5 min read</span>
+            <span class="article-read">Read →</span>
+          </div>
+        </div>
+      </a>
+
+      <a href="blog/best-time-to-buy.html" class="article-card">
+        <div class="article-img">
+          <div class="article-img-bg" style="background: linear-gradient(135deg, rgba(2,108,223,0.12) 0%, rgba(240,165,0,0.08) 100%);"></div>
+          <span class="article-img-emoji">🎫</span>
+        </div>
+        <div class="article-body">
+          <div class="article-cat">Platform Guide</div>
+          <div class="article-title">How Ticketmaster Presales Work (And How to Get Access)</div>
+          <div class="article-excerpt">Presales can mean face-value tickets before they sell out. Here's every type of Ticketmaster presale and how to qualify.</div>
+          <div class="article-meta">
+            <span>4 min read</span>
+            <span class="article-read">Read →</span>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Newsletter strip -->
+    <div class="newsletter-strip">
+      <div class="newsletter-text">
+        <h3>Ready to Find Your Seats?</h3>
+        <p>Browse millions of tickets on StubHub or find official listings on Ticketmaster. Both backed by buyer guarantees.</p>
+      </div>
+      <div class="newsletter-cta">
+        <a href="https://afflat3d2.com/trk/lnk/EEEF4C3E-BAEE-4071-A07E-A006C5AB6168/?o=31434&c=918273&a=638483&k=10629C4BFFA142D355F3D9537C689534&l=36906" class="btn btn-primary" target="_blank" rel="noopener nofollow sponsored">StubHub <span class="arrow">→</span></a>
+        <a href="https://www.ticketmaster.com" class="btn btn-tm" target="_blank" rel="noopener nofollow sponsored">Ticketmaster <span class="arrow">→</span></a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 SportsSeatFinder. All rights reserved.</div>
+      <nav class="footer-nav">
+        <a href="/">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="terms.html">Terms</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
